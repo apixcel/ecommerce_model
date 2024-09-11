@@ -2,8 +2,8 @@ import axios from "axios";
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import User from "../../models/user.model";
-import catchAsyncError from "../catchAsyncErrors";
 import ErrorHandler from "../../utils/errorhandler";
+import catchAsyncError from "../catchAsyncErrors";
 
 async function authorizeData() {
   const res = await axios.get(
@@ -14,7 +14,7 @@ async function authorizeData() {
 
 authorizeData();
 
-exports.isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
+export const isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
   const { token } = req.cookies;
 
   if (!token) {
@@ -26,7 +26,7 @@ exports.isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
   next();
 });
 
-exports.authorizeRoles = (...roles: string[]): RequestHandler => {
+export const authorizeRoles = (...roles: string[]): RequestHandler => {
   return (req, res, next) => {
     if (!roles.includes(req.user?.role)) {
       return next(
