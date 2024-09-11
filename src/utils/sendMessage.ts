@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
 
 const sendMessage = async (
-  senderMail: string,
   receiverMail: string,
   subject: string,
   html: string
@@ -20,7 +19,7 @@ const sendMessage = async (
   });
 
   const mailOptions = {
-    from: senderMail,
+    from: process.env.MAIL,
     to: receiverMail,
     subject: subject,
     html: html,

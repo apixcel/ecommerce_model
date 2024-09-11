@@ -1,51 +1,41 @@
 import cors from "cors";
 import express, { Application } from "express";
 import http from "http";
-// import morgan from "morgan";
+import cookieParser from "cookie-parser"; // Import cookie-parser
 import connectDB from "./config/db";
-
 import Stripe from "stripe";
-import { SubscriptionSeed } from "./helper/subscription";
 import User from "./models/user.model";
 import routes from "./routes/index";
+
 export const stripe = new Stripe(process.env.STRIPE_KEY as string);
+
 const app: Application = express();
 
+// Enable CORS
 app.use(
   cors({
     origin: "*",
   })
 );
-// app.use(morgan("dev"));
+
+// Middleware to parse cookies
+app.use(cookieParser()); // Add cookie-parser middleware
 
 // Connect to Database
 connectDB();
-SubscriptionSeed();
+
+// Middleware to parse JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const server = http.createServer(app);
-app.get("/", async (req, res) => {
-  const user = await User.findOne({
-    auth: "66d2b848c8b59b16c5ee89dd",
-  }).populate({
-    path: "subscription",
-    populate: {
-      path: "plan",
-      model: "Plan",
-    },
-  });
-
-  res.json(user);
-});
-
+// Routes
 app.use("/api/v1/", routes);
 
+// Create server
+const server = http.createServer(app);
 
+// Start server
 const port: any = process.env.PORT || 5000;
-
 server.listen(port, () => {
-  console.log(
-    `App is running on port: ${port}. Run with http://localhost:${port}`
-  );
+  console.log(`App is running on port: ${port}. Run with http://localhost:${port}`);
 });

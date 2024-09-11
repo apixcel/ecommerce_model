@@ -1,15 +1,10 @@
-import mongoose, { Document, Schema } from "mongoose";
+import bcrypt from "bcrypt";
+import crypto from "crypto";
+import jwt from "jsonwebtoken";
+import mongoose, { Schema } from "mongoose";
+import { IUserDocument } from "../interface/user.interface";
 
-interface IUser extends Document {
-  role_id: mongoose.Schema.Types.ObjectId;
-  full_name: string;
-  email: string;
-  password: string;
-  phone_number?: string;
-  status: "active" | "inactive" | "blocked";
-}
-
-const userSchema: Schema<IUser> = new Schema(
+const userSchema: Schema<IUserDocument> = new Schema(
   {
     role_id: {
       type: mongoose.Schema.Types.ObjectId,
@@ -25,12 +20,46 @@ const userSchema: Schema<IUser> = new Schema(
       enum: ["active", "inactive", "blocked"],
       default: "active",
     },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
   {
     timestamps: true,
   }
 );
 
-const UserModel = mongoose.model<IUser>("User", userSchema);
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
 
-export default UserModel;
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+userSchema.methods.getJWTToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET!, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+};
+
+userSchema.methods.comparePassword = async function (enteredPassword: string) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+userSchema.methods.getResetPasswordToken = async function () {
+  // generate token
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  // generate hash token and add to db
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
+
+  return resetToken;
+};
+
+const User = mongoose.model<IUserDocument>("User", userSchema);
+
+export default User;

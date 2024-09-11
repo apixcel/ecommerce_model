@@ -25,9 +25,9 @@ const productVariantSchema: Schema<IProductVariant> = new Schema(
   }
 );
 
-const ProductVariantModel = mongoose.model<IProductVariant>(
+const ProductVariant = mongoose.model<IProductVariant>(
   "ProductVariant",
   productVariantSchema
 );
 
-export default ProductVariantModel;
+export default ProductVariant;
