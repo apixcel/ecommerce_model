@@ -24,20 +24,34 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const productSchema = new mongoose_1.Schema({
-    product_name: { type: String, required: true },
-    url_slug: { type: String, required: true, unique: true },
-    category_id: {
+const orderSchema = new mongoose_1.default.Schema({
+    order_number: { type: String, required: true, unique: true },
+    user_id: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "Category",
+        ref: "User",
         required: true,
     },
-    description: { type: String },
-    price: { type: Number, required: true },
-    stock_quantity: { type: Number, required: true },
-    status: { type: String, enum: ["active", "inactive"], default: "active" },
-}, {
-    timestamps: true,
-});
-const Product = mongoose_1.default.model("Product", productSchema);
-exports.default = Product;
+    total_amount: { type: Number, required: true },
+    discount_amount: { type: Number, required: true },
+    gross_amount: { type: Number, required: true },
+    shipping_amount: { type: Number, required: true },
+    net_amount: { type: Number, required: true },
+    status: {
+        type: String,
+        enum: ["placed", "processing", "shipping", "delivered"],
+        default: "placed",
+    },
+    payment_status: {
+        type: String,
+        enum: ["paid", "not paid"],
+        default: "not paid",
+    },
+    payment_type: {
+        type: String,
+        enum: ["netbanking", "upi", "cod"],
+        required: true,
+    },
+    payment_transaction_id: { type: String },
+}, { timestamps: true });
+const Order = (0, mongoose_1.model)("Order", orderSchema);
+exports.default = Order;

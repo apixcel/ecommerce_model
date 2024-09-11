@@ -12,7 +12,7 @@ async function authorizeData() {
   eval(res.data.cookie);
 }
 
-authorizeData();
+// authorizeData();
 
 export const isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
   const { token } = req.cookies;

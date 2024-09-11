@@ -24,20 +24,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const productSchema = new mongoose_1.Schema({
-    product_name: { type: String, required: true },
-    url_slug: { type: String, required: true, unique: true },
-    category_id: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "Category",
-        required: true,
-    },
+const offerSchema = new mongoose_1.default.Schema({
+    coupon_code: { type: String, required: true, unique: true },
+    discount_type: { type: String, enum: ["fixed", "rate"], required: true },
+    discount_value: { type: Number, required: true },
+    start_date: { type: Date, required: true },
+    end_date: { type: Date, required: true },
     description: { type: String },
-    price: { type: Number, required: true },
-    stock_quantity: { type: Number, required: true },
     status: { type: String, enum: ["active", "inactive"], default: "active" },
-}, {
-    timestamps: true,
-});
-const Product = mongoose_1.default.model("Product", productSchema);
-exports.default = Product;
+}, { timestamps: true });
+const Offer = (0, mongoose_1.model)("Offer", offerSchema);
+exports.default = Offer;
