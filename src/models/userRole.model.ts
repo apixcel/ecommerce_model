@@ -1,16 +1,18 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from "mongoose";
 
 interface IUserRole extends Document {
-  role_name: 'Admin' | 'Customer';
-
+  role_name: "Admin" | "Customer";
 }
 
-const userRoleSchema: Schema<IUserRole> = new Schema({
-  role_name: { type: String, required: true, enum: ['Admin', 'Customer'] }
-}, {
-  timestamps: true 
-});
+const userRoleSchema: Schema<IUserRole> = new Schema(
+  {
+    role_name: { type: String, required: true, enum: ["Admin", "Customer"] },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const UserRoleModel = mongoose.model<IUserRole>('UserRole', userRoleSchema);
+const UserRoleModel = mongoose.model<IUserRole>("UserRole", userRoleSchema);
 
 export default UserRoleModel;

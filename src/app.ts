@@ -6,8 +6,6 @@ import connectDB from "./config/db";
 
 import Stripe from "stripe";
 import { SubscriptionSeed } from "./helper/subscription";
-import errorMiddleware from "./middlewares/error";
-import { notFound } from "./middlewares/not-found";
 import User from "./models/user.model";
 import routes from "./routes/index";
 export const stripe = new Stripe(process.env.STRIPE_KEY as string);
@@ -43,11 +41,6 @@ app.get("/", async (req, res) => {
 
 app.use("/api/v1/", routes);
 
-// Middleware for Errors
-app.use(errorMiddleware);
-
-//handle not found
-app.use(notFound);
 
 const port: any = process.env.PORT || 5000;
 
