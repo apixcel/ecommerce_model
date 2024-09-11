@@ -19,7 +19,7 @@ app.use(
 );
 
 // Middleware to parse cookies
-app.use(cookieParser()); // Add cookie-parser middleware
+app.use(cookieParser());
 
 // Connect to Database
 connectDB();
