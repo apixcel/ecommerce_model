@@ -11,6 +11,6 @@ const userRoleSchema: Schema<IUserRole> = new Schema({
   timestamps: true 
 });
 
-const UserRoleModel = mongoose.model<IUserRole>('UserRole', userRoleSchema);
+const UserRole = mongoose.model<IUserRole>('UserRole', userRoleSchema);
 
-export default UserRoleModel;
+export default UserRole;

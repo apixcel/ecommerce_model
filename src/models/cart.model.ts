@@ -26,6 +26,6 @@ const cartSchema: Schema<ICart> = new Schema(
   }
 );
 
-const CartModel = mongoose.model<ICart>("Cart", cartSchema);
+const Cart = mongoose.model<ICart>("Cart", cartSchema);
 
-export default CartModel;
+export default Cart;
