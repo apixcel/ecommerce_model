@@ -41,11 +41,24 @@ router.get(
   getAllUsers
 );
 
-router
-  .route("/admin/user/:id")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getSingleUser)
-  .put(isAuthenticatedUser, authorizeRoles("admin"), updateUserRole)
-  .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteUser);
+router.get(
+  "/admin/user:id",
+  isAuthenticatedUser,
+  authorizeRoles("admin"),
+  getSingleUser
+);
+router.put(
+  "/admin/user:id",
+  isAuthenticatedUser,
+  authorizeRoles("admin"),
+  updateUserRole
+);
+router.delete(
+  "/admin/user:id",
+  isAuthenticatedUser,
+  authorizeRoles("admin"),
+  deleteUser
+);
 
 const userRoutes = router;
 

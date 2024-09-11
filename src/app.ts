@@ -1,10 +1,10 @@
+import cookieParser from "cookie-parser"; // Import cookie-parser
 import cors from "cors";
 import express, { Application } from "express";
 import http from "http";
-import cookieParser from "cookie-parser"; 
-import connectDB from "./config/db";
 import Stripe from "stripe";
-import User from "./models/user.model";
+import connectDB from "./config/db";
+import errorMiddleware from "./middlewares/error";
 import routes from "./routes/index";
 
 export const stripe = new Stripe(process.env.STRIPE_KEY as string);
@@ -30,6 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/v1/", routes);
+app.use(errorMiddleware);
 
 // Create server
 const server = http.createServer(app);
@@ -37,5 +38,7 @@ const server = http.createServer(app);
 // Start server
 const port: any = process.env.PORT || 5000;
 server.listen(port, () => {
-  console.log(`App is running on port: ${port}. Run with http://localhost:${port}`);
+  console.log(
+    `App is running on port: ${port}. Run with http://localhost:${port}`
+  );
 });
