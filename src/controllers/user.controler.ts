@@ -8,24 +8,11 @@ import { sendToken } from "../utils/sendToken";
 
 // Register User
 export const registerUser = catchAsyncError(async (req, res, next) => {
-  const myCloud = await cloudinary.uploader.upload(req.body.avatar, {
-    folder: "avatars",
-    width: 150,
-    crop: "scale",
-  });
 
-  const { name, email, gender, password } = req.body;
 
-  const user = await User.create({
-    name,
-    email,
-    gender,
-    password,
-    avatar: {
-      public_id: myCloud.public_id,
-      url: myCloud.secure_url,
-    },
-  });
+  console.log("body", req.body);
+
+  const user = await User.create(req.body);
 
   sendToken(user, 201, res);
 });
@@ -68,7 +55,7 @@ export const logoutUser = catchAsyncError(async (req, res, next) => {
 
 // Get User Details
 export const getUserDetails = catchAsyncError(async (req, res, next) => {
-  const user = await User.findById(req.user?.id);
+  const user = await User.findById(req.user?.id).select("-password");
 
   res.status(200).json({
     success: true,
