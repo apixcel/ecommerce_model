@@ -1,7 +1,7 @@
 import cors from "cors";
 import express, { Application } from "express";
 import http from "http";
-import cookieParser from "cookie-parser"; // Import cookie-parser
+import cookieParser from "cookie-parser"; 
 import connectDB from "./config/db";
 import Stripe from "stripe";
 import User from "./models/user.model";
@@ -19,7 +19,7 @@ app.use(
 );
 
 // Middleware to parse cookies
-app.use(cookieParser()); // Add cookie-parser middleware
+app.use(cookieParser());
 
 // Connect to Database
 connectDB();
