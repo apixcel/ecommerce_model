@@ -13,30 +13,33 @@ import {
   updateProfile,
   updateUserRole,
 } from "../controllers/user.controler";
-const router = Router();
-const userRoutes = router;
 
 import {
   authorizeRoles,
   isAuthenticatedUser,
 } from "../middlewares/user_actions/auth";
 
-router.route("/register").post(registerUser);
-router.route("/login").post(loginUser);
-router.route("/logout").get(logoutUser);
+const router = Router();
+router.post("/register", registerUser);
+router.post("/login", loginUser);
 
-router.route("/me").get(isAuthenticatedUser, getUserDetails);
+router.get("/logout", logoutUser);
 
-router.route("/password/forgot").post(forgotPassword);
-router.route("/password/reset/:token").put(resetPassword);
+router.get("/me", isAuthenticatedUser, getUserDetails);
 
-router.route("/password/update").put(isAuthenticatedUser, updatePassword);
+router.post("/password/forgot", forgotPassword);
+router.put("/password/reset/:token", resetPassword);
 
-router.route("/me/update").put(isAuthenticatedUser, updateProfile);
+router.put("/password/update", isAuthenticatedUser, updatePassword);
 
-router
-  .route("/admin/users")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getAllUsers);
+router.put("/me/update", isAuthenticatedUser, updateProfile);
+
+router.get(
+  "/admin/users",
+  isAuthenticatedUser,
+  authorizeRoles("admin"),
+  getAllUsers
+);
 
 router
   .route("/admin/user/:id")
@@ -44,6 +47,6 @@ router
   .put(isAuthenticatedUser, authorizeRoles("admin"), updateUserRole)
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteUser);
 
-module.exports = router;
+const userRoutes = router;
 
 export default userRoutes;
