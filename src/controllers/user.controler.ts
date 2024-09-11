@@ -3,7 +3,7 @@ import cloudinary from "../config/cloud";
 import catchAsyncError from "../middlewares/catchAsyncErrors";
 import User from "../models/user.model";
 import ErrorHandler from "../utils/errorhandler";
-import { sendEmail } from "../utils/sendEmail";
+import sendMessage from "../utils/sendMessage";
 import { sendToken } from "../utils/sendToken";
 
 // Register User
@@ -96,13 +96,31 @@ export const forgotPassword = catchAsyncError(async (req, res, next) => {
   // const message = `Your password reset token is : \n\n ${resetPasswordUrl}`;
 
   try {
-    await sendEmail({
-      email: user.email,
-      templateId: process.env.SENDGRID_RESET_TEMPLATEID,
-      data: {
-        reset_url: resetPasswordUrl,
-      },
-    });
+    await sendMessage(
+      user.email,
+      "resetYour password",
+
+      `<div style="font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333; margin: 0; padding: 0;">
+      <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border: 1px solid #ddd;">
+          <div style="text-align: center; background-color: #00466a; color: white; padding: 10px;">
+              <h1 style="margin: 0;">Password Reset</h1>
+          </div>
+          <div style="padding: 20px;">
+              <p>Hello,</p>
+              <p>We received a request to reset your password. Click the button below to reset it.</p>
+              <div style="text-align: center; margin: 20px 0;">
+                  <a href="${resetPasswordUrl}" style="display: inline-block; padding: 10px 20px; background-color: #00466a; color: white; text-decoration: none; border-radius: 5px;">Reset Password</a>
+              </div>
+              <p>If you did not request a password reset, please ignore this email.</p>
+              <p>Thanks,</p>
+              <p>Memes canvas</p>
+          </div>
+          <div style="text-align: center; background-color: #f1f1f1; color: #555; padding: 10px;">
+              <p style="margin: 0;">&copy; 2024 Fresh Blogs. All rights reserved.</p>
+          </div>
+      </div>
+  </div>`
+    );
 
     res.status(200).json({
       success: true,
