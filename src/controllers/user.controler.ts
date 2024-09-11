@@ -1,5 +1,4 @@
 import crypto from "crypto";
-import cloudinary from "../config/cloud";
 import catchAsyncError from "../middlewares/catchAsyncErrors";
 import User from "../models/user.model";
 import ErrorHandler from "../utils/errorhandler";
@@ -8,8 +7,6 @@ import { sendToken } from "../utils/sendToken";
 
 // Register User
 export const registerUser = catchAsyncError(async (req, res, next) => {
-
-
   console.log("body", req.body);
 
   const user = await User.create(req.body);

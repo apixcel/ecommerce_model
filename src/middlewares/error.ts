@@ -38,6 +38,8 @@ const errorMiddleware = (
   res.status(err.statusCode).json({
     success: false,
     message: err.message,
+    data: null,
+    statuscode: err.statusCode || 400,
   });
 };
 
